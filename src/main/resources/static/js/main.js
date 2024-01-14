@@ -15,9 +15,11 @@ async function mainEntry(){
             let card = document.querySelectorAll("#templates>.card")[0].cloneNode(true);
             card.setAttribute("data",y+"_"+x);
             card.onclick=onCardClick;
-            card.querySelectorAll(".card-front img")[0].src = data.board.cards[y][x].url;
+            card.querySelectorAll(".card-front img")[0].src = (data.board.cards[y][x]!=null) ? data.board.cards[y][x].url : "";
             let cardValue = card.querySelectorAll(".cardValue")[0];
-            cardValue.innerHTML=data.board.cards[y][x].value;
+            if (data.board.cards[y][x]!=null) {
+                cardValue.innerHTML = data.board.cards[y][x].value;
+            }
             rowhtml.appendChild(card);
         }
     }

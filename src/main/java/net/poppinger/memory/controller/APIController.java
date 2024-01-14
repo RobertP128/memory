@@ -24,6 +24,16 @@ public class APIController {
     }
 
 
+    @RequestMapping(value = "resetBoard",produces = "application/json")
+    @ResponseBody
+    public String resetBoard() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        appModel.reset();
+        return mapper.writeValueAsString(appModel.getGame());
+
+    }
+
+
     @RequestMapping(value = "initBoard",produces = "application/json")
     @ResponseBody
     public String initBoard() throws JsonProcessingException {
