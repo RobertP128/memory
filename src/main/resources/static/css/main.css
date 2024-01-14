@@ -9,6 +9,7 @@ body{
 }
 
 #debugger{
+    display: none;
     background-color: black;
     color: lightgreen;
     position: absolute;
