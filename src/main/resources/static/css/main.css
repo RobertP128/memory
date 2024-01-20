@@ -25,16 +25,44 @@ body{
     display: none;
 }
 
+#gameHeadline{
+    text-align: center;
+    font-size: 35px;
+    color: gold;
+}
+
+#game-outerboard{
+}
+
+#currentMessage{
+    color: white;
+    font-size: 26px;
+    text-align: center;
+}
+
+#game-parent{
+    display: flex;
+    justify-content: left;
+    align-items: normal;
+    height: 100%;
+    width: 100%;
+}
+
+
 .row{
     display: flex;
 }
 
 .card{
-    width: 100px;
-    height: 100px;
+    width: 59px;
+    height: 84px;
     margin: 5px;
     /*background-color: white;*/
     border-radius: 10px;
+}
+
+.card-small{
+    height: 13px;
 }
 
 .card-front{
@@ -57,4 +85,23 @@ body{
 
 .card-front .cardValue{
     display: none;
+}
+
+.playerStackBox {
+    width: 150px;
+    height: 745px;
+    margin: 5px;
+    border: 1px solid black;
+    color: gold;
+
+}
+.playerStackBox img {
+    border: 1px solid white;
+}
+
+.playerStackBoxHeadline{
+    text-align: center;
+}
+#player1stackCards,#player2stackCards{
+    padding-top: 43px;
 }

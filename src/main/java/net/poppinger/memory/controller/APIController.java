@@ -22,14 +22,23 @@ public class APIController {
     }
 
 
+    private AppModel createAppModel() {
+        return new AppModel();
+
+    }
+
     private AppModel getAppModel(HttpSession session) {
         var appmodelKey=(String)session.getAttribute("appModel");
         if (appmodelKey==null){
             appmodelKey=session.getId();
-            var appmodel = new AppModel();
+            var appmodel = createAppModel();
             setAppModel(session,appmodel);
         }
         var appmodel = sessions.get(appmodelKey);
+        if (appmodel==null){
+            appmodel = createAppModel();
+            setAppModel(session,appmodel);
+        }
         return appmodel;
     }
     private void setAppModel(HttpSession session,AppModel appModel) {

@@ -60,8 +60,14 @@ public class Game {
                 // add Both cards to activePlayers stack
                 // set both cards to null
                 // add Both cards to activePlayers stack
-                board.getPlayer1Stack().addCard(prevOpenenedCard);
-                board.getPlayer1Stack().addCard(selctedCard);
+                if (activePlayer == 1){
+                    board.getPlayer1Stack().addCard(prevOpenenedCard);
+                    board.getPlayer1Stack().addCard(selctedCard);
+                }
+                else {
+                    board.getPlayer2Stack().addCard(prevOpenenedCard);
+                    board.getPlayer2Stack().addCard(selctedCard);
+                }
 
                 // set both cards to null
                 board.getCards()[y][x] = null;

@@ -26,6 +26,25 @@ async function mainEntry(){
 
 }
 
+function updateCurrentPlayer(activePlayer){
+    var messageBx=document.getElementById("currentMessage");
+    messageBx.innerHTML="Player "+activePlayer;
+}
+
+function drawPlayerStack(playerStackElement,data){
+    // Data = array of cards
+    playerStackElement.innerHTML="";
+    // Loop over data and draw cards
+    let rowTmpl = document.querySelectorAll("#templates .card")[0];
+    for (let i = 0; i < data.length; i++) {
+        let card = rowTmpl.cloneNode(true);
+        // add card-small class if needed
+        card.classList.add("card-small");
+        card.querySelectorAll(".card-front img")[0].src = (data[i]!=null) ? data[i].url : "";
+        playerStackElement.appendChild(card);
+    }
+
+}
 
 async function updateBoard(game) {
     let SWAP_PLAYER="SWAP_PLAYER";
@@ -51,10 +70,15 @@ async function updateBoard(game) {
                 card.querySelectorAll(".card-front img")[0].src ="";
             }
         }
-
-
     }
 
+    var player1stack=document.getElementById("player1stackCards");
+    var player2stack=document.getElementById("player2stackCards");
+
+    drawPlayerStack(player1stack,game.board.player1Stack.cards);
+    drawPlayerStack(player2stack,game.board.player2Stack.cards);
+
+    updateCurrentPlayer(game.activePlayer);
 
     if (game.actions.length>0){
 

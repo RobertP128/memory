@@ -8,8 +8,21 @@
 </head>
 <body onload="mainEntry()">
 <div>
-    <h1>Memory Game</h1>
-    <div id="game-board"></div>
+    <div id="gameHeadline">Memory Game</div>
+    <div id="game-outerboard">
+        <div id="currentMessage">Hello</div>
+        <div id="game-parent">
+            <div id="game-board"></div>
+            <div id="player1stack" class="playerStackBox">
+                <div class="playerStackBoxHeadline">Player 1</div>
+                <div id="player1stackCards"></div>
+            </div>
+            <div id="player2stack" class="playerStackBox">
+                <div class="playerStackBoxHeadline">Player 2</div>
+                <div id="player2stackCards"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Templates -->
 <div id="templates">
