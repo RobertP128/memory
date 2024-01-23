@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/")
@@ -53,6 +55,15 @@ public class APIController {
         session.setAttribute("test","test");
         return "test";
     }
+
+
+    @RequestMapping("getSessions")
+    @ResponseBody
+    public Set<String> getSessions(){
+        var list=sessions.keySet();
+        return list;
+    }
+
 
 
     @RequestMapping(value = "resetBoard",produces = "application/json")

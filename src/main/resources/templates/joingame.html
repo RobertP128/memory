@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory</title>
+</head>
+<body>
+
+<div>Join one of there sessions</div>
+<div>
+    <div th:each="sess: ${sessions}">
+        <a th:href="${'/game.html?sessionid='+sess}"><span th:text="${sess}" /></a>
+    </div>
+</div>
+<div>Or start a fresh game</div>
+<a href="/game.html">Start Game</a>
+</body>
+</html>
