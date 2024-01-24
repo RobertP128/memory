@@ -10,7 +10,14 @@
   <script>
     let chartData=[[${chartData}]];
   </script>
-
+<style>
+  circle{
+    display: none;
+  }
+  body{
+    background-color: black;
+  }
+</style>
 </head>
 <body>
 <div id="example">
@@ -20,6 +27,9 @@
   <script>
     function createChart() {
       $("#chart").kendoChart({
+        plotArea: {
+          background: "black"
+        },
         title: {
           text: "Charge current vs. charge time"
         },
@@ -31,21 +41,30 @@
         },
         series: [{
           name: "0.8C",
-          data: chartData
+          data: chartData,
+          color: "lightgreen",
         }],
         xAxis: {
           //max: 90,
           labels: {
-            format: "{0}m"
+            format: "{0}"
           },
           title: {
-            text: "Time"
+            text: "Filessize [kB]"
+          },
+          minorGridLines: {
+            visible: true
+          },
+          minorTicks: {
+            visible: true
           }
+
+
         },
         yAxis: {
           //max: 100,
           labels: {
-            format: "{0}%"
+            format: "{0}"
           },
           title: {
             text: "Charge"
@@ -53,7 +72,7 @@
         },
         tooltip: {
           visible: true,
-          format: "{1}% in {0} minutes"
+          format: "{1} Files with {0} kB"
         }
       });
     }
