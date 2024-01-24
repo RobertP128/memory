@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,23 +32,57 @@ public class APIController {
 
     }
 
+    private String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    private String generateAppModelKey(HttpSession session) throws NoSuchAlgorithmException{
+        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+        final byte[] hashbytes = digest.digest(
+                session.getId().getBytes(StandardCharsets.UTF_8));
+        String sha3Hex = bytesToHex(hashbytes);
+        return sha3Hex;
+    }
+
+
     private AppModel getAppModel(HttpSession session) {
         var appmodelKey=(String)session.getAttribute("appModel");
         if (appmodelKey==null){
-            appmodelKey=session.getId();
-            var appmodel = createAppModel();
-            setAppModel(session,appmodel);
+            try {
+                appmodelKey = generateAppModelKey(session);
+                var appmodel = createAppModel();
+                setAppModel(session,appmodel);
+            }
+            catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
         var appmodel = sessions.get(appmodelKey);
         if (appmodel==null){
             appmodel = createAppModel();
-            setAppModel(session,appmodel);
+            try {
+                setAppModel(session, appmodel);
+            }
+            catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
         return appmodel;
     }
-    private void setAppModel(HttpSession session,AppModel appModel) {
-        session.setAttribute("appModel",session.getId());
-        sessions.put(session.getId(),appModel);
+    private void setAppModel(HttpSession session,AppModel appModel) throws NoSuchAlgorithmException {
+        var key=generateAppModelKey(session);
+        session.setAttribute("appModel",key);
+        sessions.put(key,appModel);
     }
 
 
@@ -71,9 +108,18 @@ public class APIController {
     public String resetBoard(HttpSession session) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
-        appModel.reset();
-        setAppModel(session,appModel);
-        return mapper.writeValueAsString(appModel.getGame());
+        if (appModel!=null) {
+            appModel.reset();
+            try {
+                setAppModel(session, appModel);
+                return mapper.writeValueAsString(appModel.getGame());
+            }
+            catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                throw new RuntimeException("No such algorithm exception");
+            }
+        }
+        throw new RuntimeException("appModel is null");
 
     }
 
@@ -100,7 +146,7 @@ public class APIController {
 
     @RequestMapping(value = "swapPlayerResponse",produces = "application/json")
     @ResponseBody
-    public String swapPlayerResponse(HttpSession session) throws JsonProcessingException {
+    public String swapPlayerResponse(HttpSession session) throws JsonProcessingException,NoSuchAlgorithmException {
         ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
 
@@ -115,7 +161,7 @@ public class APIController {
 
     @RequestMapping(value = "clickCard",produces = "application/json")
     @ResponseBody
-    public String clickCard(@RequestParam Integer x,@RequestParam Integer y,HttpSession session) throws JsonProcessingException {
+    public String clickCard(@RequestParam Integer x,@RequestParam Integer y,HttpSession session) throws JsonProcessingException,NoSuchAlgorithmException {
         ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
 
