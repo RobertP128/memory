@@ -37,7 +37,9 @@ public class Game {
         actions.clear();
 
         var selctedCard=board.getCards()[y][x];
-
+        if (selctedCard == null){
+            return;
+        }
 
         if (selctedCard.getState() == CardState.REVEALED){
             // Cannot flip a flipped Card

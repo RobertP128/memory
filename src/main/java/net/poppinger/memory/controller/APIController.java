@@ -54,6 +54,14 @@ public class APIController {
 
 
     private AppModel getAppModel(HttpSession session) {
+
+        var joinedSessionKey=(String)session.getAttribute("sessionKey");
+        if (joinedSessionKey!=null){
+            if (sessions.containsKey(joinedSessionKey)){
+                return sessions.get(joinedSessionKey);
+            }
+        }
+
         var appmodelKey=(String)session.getAttribute("appModel");
         if (appmodelKey==null){
             try {
