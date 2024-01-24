@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link href="https://kendo.cdn.telerik.com/themes/7.0.2/default/default-main.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+  <script src="js/kendo.all.min.js"></script>
+
+  <script>
+    let chartData=[[${chartData}]];
+  </script>
+
+</head>
+<body>
+<div id="example">
+  <div class="demo-section wide">
+    <div id="chart"></div>
+  </div>
+  <script>
+    function createChart() {
+      $("#chart").kendoChart({
+        title: {
+          text: "Charge current vs. charge time"
+        },
+        legend: {
+          visible: true
+        },
+        seriesDefaults: {
+          type: "scatterLine"
+        },
+        series: [{
+          name: "0.8C",
+          data: chartData
+        }],
+        xAxis: {
+          //max: 90,
+          labels: {
+            format: "{0}m"
+          },
+          title: {
+            text: "Time"
+          }
+        },
+        yAxis: {
+          //max: 100,
+          labels: {
+            format: "{0}%"
+          },
+          title: {
+            text: "Charge"
+          }
+        },
+        tooltip: {
+          visible: true,
+          format: "{1}% in {0} minutes"
+        }
+      });
+    }
+
+
+    $(document).ready(createChart);
+    $(document).bind("kendo:skinChange", createChart);
+  </script>
+</div>
+
+
+
+</body>
+</html>
