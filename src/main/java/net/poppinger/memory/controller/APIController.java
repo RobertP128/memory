@@ -88,8 +88,19 @@ public class APIController {
         return appmodel;
     }
     private void setAppModel(HttpSession session,AppModel appModel) throws NoSuchAlgorithmException {
-        var key=generateAppModelKey(session);
-        session.setAttribute("appModel",key);
+        String key="";
+        // search for the same instance first
+        // if not present the add as this key
+        for(Map.Entry<String, AppModel> entry : sessions.entrySet()) {
+            if (entry.getValue().equals(appModel)){
+                key=entry.getKey();
+                break;
+            }
+        }
+        if (key==""){
+            key=generateAppModelKey(session);
+            session.setAttribute("appModel",key);
+        }
         sessions.put(key,appModel);
     }
 
