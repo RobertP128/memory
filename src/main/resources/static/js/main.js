@@ -24,6 +24,13 @@ async function mainEntry(){
         }
     }
 
+    var player1stack=document.getElementById("player1stackCards");
+    var player2stack=document.getElementById("player2stackCards");
+
+    drawPlayerStack(player1stack,data.board.player1Stack.cards);
+    drawPlayerStack(player2stack,data.board.player2Stack.cards);
+
+    updateCurrentPlayer(data.activePlayer);
 }
 
 function updateCurrentPlayer(activePlayer){
