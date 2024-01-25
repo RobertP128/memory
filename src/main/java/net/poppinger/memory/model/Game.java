@@ -14,14 +14,23 @@ public class Game {
 
     private Board board;
 
+    private static Integer id_seq=0;
+    private Integer id=0;
+
     private int activePlayer;
     private List<String> actions = new ArrayList<>();
 
-    public Game(Board board){
-        this.board = board;
+    public Game(){
+
         activePlayer = 1;
+        id=id_seq++;
     }
 
+    public Game(Board board){
+        this.board=board;
+        activePlayer = 1;
+        id=id_seq++;
+    }
 
     private void swapActivePlayer(){
         if (activePlayer == 1){
@@ -95,3 +104,4 @@ public class Game {
         }
     }
 }
+

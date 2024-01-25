@@ -27,9 +27,16 @@ public class APIController {
     }
 
 
-    private AppModel createAppModel() {
-        return new AppModel();
+    public Map<String, AppModel> getRawSessions() {
+        return sessions;
+    }
 
+
+    private AppModel createAppModel() {
+        var appModel= new AppModel();
+        appModel.reset();
+        appModel.getGame().getBoard().initBoard();
+        return appModel;
     }
 
     private String bytesToHex(byte[] hash) {
@@ -188,6 +195,7 @@ public class APIController {
         game.toggleCard(x,y);
 
         var json = mapper.writeValueAsString(game);
+        json=json.replaceAll("\\\"rawUrl\\\" : \\\".*\\\"", "\"rawUrl\" : \"\"");
         game.getActions().clear();
 
         setAppModel(session,appModel);

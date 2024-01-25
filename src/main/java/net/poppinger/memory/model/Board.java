@@ -15,7 +15,7 @@ public class Board {
     private PlayerStack player2Stack;
 
     public Board(){
-        initBoard();
+
     }
     public void initBoard(){
         player1Stack = new PlayerStack();
