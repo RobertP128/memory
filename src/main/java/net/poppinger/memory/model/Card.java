@@ -1,11 +1,13 @@
 package net.poppinger.memory.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonFilter("myFilter")
 public class Card {
 
     private int value;
@@ -39,6 +41,16 @@ public class Card {
 
     private void setUrl(String value){
        url=value;
+    }
+
+
+
+    public int getRawValue(){
+        return value;
+    }
+
+    public void setRawValue(int value){
+        this.value = value;
     }
 
 

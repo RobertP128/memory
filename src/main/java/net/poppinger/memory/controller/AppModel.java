@@ -2,6 +2,10 @@ package net.poppinger.memory.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import net.poppinger.memory.model.Board;
 import net.poppinger.memory.model.Game;
@@ -31,7 +35,14 @@ public class AppModel {
         // Serialize Game
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String serializedGame = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(game);
+
+            // Remove the value and url properties since they are dynamic based on the Cardstate
+            SimpleBeanPropertyFilter theFilter = SimpleBeanPropertyFilter
+                    .serializeAllExcept("value", "url");
+            FilterProvider filters = new SimpleFilterProvider()
+                    .addFilter("myFilter", theFilter);
+
+            String serializedGame = mapper.writer(filters).writeValueAsString(game);
             // Write the string to a file
             BufferedWriter bw=new BufferedWriter(new java.io.FileWriter("game_"+game.getId()+".json"));
             bw.write(serializedGame);
@@ -60,4 +71,21 @@ public class AppModel {
         }
 
     }
+
+    public String serlialize(boolean filtered) throws JsonProcessingException{
+            ObjectMapper mapper = new ObjectMapper();
+
+            if (filtered) {
+                SimpleBeanPropertyFilter theFilter = SimpleBeanPropertyFilter
+                        .serializeAllExcept("rawValue", "rawUrl");
+                FilterProvider filters = new SimpleFilterProvider()
+                        .addFilter("myFilter", theFilter);
+                return mapper.writer(filters).writeValueAsString(game);
+            }
+
+        return mapper.writer().writeValueAsString(game);
+
+
+    }
+
 }

@@ -1,7 +1,6 @@
 package net.poppinger.memory.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,13 +130,12 @@ public class APIController {
     @RequestMapping(value = "resetBoard",produces = "application/json")
     @ResponseBody
     public String resetBoard(HttpSession session) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
         if (appModel!=null) {
             appModel.reset();
             try {
                 setAppModel(session, appModel);
-                return mapper.writeValueAsString(appModel.getGame());
+                return appModel.serlialize(true);
             }
             catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
@@ -153,9 +150,8 @@ public class APIController {
     @RequestMapping(value = "initBoard",produces = "application/json")
     @ResponseBody
     public String initBoard(HttpSession session) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
-        return mapper.writeValueAsString(appModel.getGame());
+        return appModel.serlialize(true);
 
     }
 
@@ -163,24 +159,22 @@ public class APIController {
     @RequestMapping(value = "getBoard",produces = "application/json")
     @ResponseBody
     public String getBoard(HttpSession session) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
 
-        return mapper.writeValueAsString(appModel.getGame());
+        return appModel.serlialize(true);
 
     }
 
     @RequestMapping(value = "swapPlayerResponse",produces = "application/json")
     @ResponseBody
     public String swapPlayerResponse(HttpSession session) throws JsonProcessingException,NoSuchAlgorithmException {
-        ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
 
         var game=appModel.getGame();
         game.swapPlayerResponse();
         setAppModel(session,appModel);
 
-        return mapper.writeValueAsString(game);
+        return appModel.serlialize(true);
 
     }
 
@@ -188,14 +182,12 @@ public class APIController {
     @RequestMapping(value = "clickCard",produces = "application/json")
     @ResponseBody
     public String clickCard(@RequestParam Integer x,@RequestParam Integer y,HttpSession session) throws JsonProcessingException,NoSuchAlgorithmException {
-        ObjectMapper mapper = new ObjectMapper();
         var appModel=getAppModel(session);
 
         var game=appModel.getGame();
         game.toggleCard(x,y);
 
-        var json = mapper.writeValueAsString(game);
-        json=json.replaceAll("\\\"rawUrl\\\" : \\\".*\\\"", "\"rawUrl\" : \"\"");
+        var json = appModel.serlialize(true);
         game.getActions().clear();
 
         setAppModel(session,appModel);
